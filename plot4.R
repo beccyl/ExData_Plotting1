@@ -9,8 +9,9 @@ length(indices)
 dataset <- fread("household_power_consumption.txt", sep=";", header=FALSE, skip=indices[1], nrows=length(indices), colClasses=c("character","character",rep("numeric",3), "NULL",rep("numeric",3)))
 setnames(dataset,c("Date","Time","Global_active_power","Global_reactive_power","Voltage","Sub_metering_1","Sub_metering_2","Sub_metering_3"))
 
-## convert col 2 to DateTime
+## convert col 1 to Date
 dataset[,Date:=as.Date(dataset[,Date], format="%d/%m/%Y")]
+## convert col 2 to DateTime
 dataset[,Time:=as.POSIXct(strptime(paste(dataset[,Date],dataset[,Time]),"%Y-%m-%d %H:%M:%S"))]
 
 ## construct plot and save to png (480px by 480px)
@@ -34,4 +35,5 @@ with(dataset, {
   ## plot 4
   plot(Time, Global_reactive_power, type="l", xlab="datetime")
 })
+
 dev.off()  ## close the device
