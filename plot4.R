@@ -3,7 +3,6 @@ library(data.table)
 ## read first column of file to determine relevant rows
 rows <- fread("household_power_consumption.txt", sep=";", header=TRUE, stringsAsFactors=FALSE, colClasses=c("character",rep("NULL",8)))
 indices <- rows[,.I[Date=="1/2/2007" | Date=="2/2/2007"]]
-length(indices)
 
 ## read data for relevant rows
 dataset <- fread("household_power_consumption.txt", sep=";", header=FALSE, skip=indices[1], nrows=length(indices), colClasses=c("character","character",rep("numeric",3), "NULL",rep("numeric",3)))
@@ -15,7 +14,7 @@ dataset[,Date:=as.Date(dataset[,Date], format="%d/%m/%Y")]
 dataset[,Time:=as.POSIXct(strptime(paste(dataset[,Date],dataset[,Time]),"%Y-%m-%d %H:%M:%S"))]
 
 ## construct plot and save to png (480px by 480px)
-png(filename="plot4.png", width=480, height=480, units="px") ## open png device
+png(filename="plot4.png", width=480, height=480, units="px", bg="transparent") ## open png device
 
 ## multiple plots (2 rows, 2 column)
 par(mfrow=c(2,2))
